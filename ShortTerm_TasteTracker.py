@@ -5,7 +5,6 @@ import spotipy.util as util
 from datetime import date
 
 
-
 # GOAL 1 (COMPLETED: 9/10/20): PUT DAILY SHORT TERM TRACK AND ARTIST DATA INTO CSV FILES ON SINGLE LINE
 # GOAL 2 (UPDATED: 9/10/20): AUTOMATE RUNNING OF SCRIPT
 
@@ -36,6 +35,14 @@ else:
 # get today's date
 today = date.today()
 
+# validate that today's data has not already been added
+# only need to check one of the csv files
+with open('tastetracker_tracks.csv', newline='') as csvfile:
+    line_read = csv.reader(csvfile, delimiter=' ')
+    for row in line_read:
+        if row[0] == today.strftime("%B %d, %Y"):
+            sys.exit()
+  
 # create list of today's date followed by the id's of my top 50 songs
 track_results = sp.current_user_top_tracks(time_range='short_term', limit=50)
 track_ids = [today.strftime("%B %d, %Y")]
